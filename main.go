@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"dspractice/binarytrees"
+	"dspractice-go/binarytrees"
 )
 
 func main() {
@@ -80,4 +80,13 @@ func build123() {
 	fmt.Println("Calling same tree on 'a' with 'c' as argument:")
 	d = a.SameTree(c)
 	fmt.Println(d)
+
+	// testing CountTrees function
+	fmt.Println("Trees with BST with 17 nodes:")
+	trees := binarytrees.CountTrees(17)
+	fmt.Println(trees)
+	// testing CountTreesD function
+	fmt.Println("Trees with BST with 17 nodes using dynamic version:")
+	trees = binarytrees.CountTreesD(17)
+	fmt.Println(trees)
 }

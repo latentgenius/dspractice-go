@@ -172,3 +172,46 @@ func (n *Node) SameTree(otherTree *Node) bool {
 	}
 	return false
 }
+
+// CountTreesD returns the number of binary search trees that can be created with nodes
+// 1...N, where N is the number of nodes in the tree. Each tree has int data members
+// 1...N too. This version uses dynamic programming to increase efficiency
+func CountTreesD(N int) int {
+	lookupSlc := make([]int, N+1)
+	lookupSlc[0], lookupSlc[1] = 1, 1
+
+	return count(N, lookupSlc)
+}
+
+func count(N int, slc []int) int {
+	if slc[N] > 0 {
+		return slc[N]
+	}
+	for root, left, right, sum := 1, 0, 0, 0; root <= N; root++ {
+		left = count(root-1, slc)
+		right = count(N-root, slc)
+		sum += left * right
+		slc[N] = sum
+	}
+
+	return slc[N]
+}
+
+// CountTrees returns the number of binary search trees that can be created with nodes
+// 1...N, where N is the number of nodes in the tree. Each tree has int data members
+// 1...N too
+func CountTrees(N int) int {
+	// lookupSlc := make([]int, N+1)
+	// lookupSlc[0], lookupSlc[1] = 1, 1
+	if N <= 0 {
+		return 1
+	}
+	sum := 0
+	for root, left, right := 1, 0, 0; root <= N; root++ {
+		left = CountTrees(root - 1)
+		right = CountTrees(N - root)
+		sum += left * right
+	}
+
+	return sum
+}
