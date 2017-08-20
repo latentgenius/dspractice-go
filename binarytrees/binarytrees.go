@@ -19,7 +19,7 @@ func (n *Node) IsEmpty() bool {
 // HasNoChildren returns true if the current node has no children, false
 // otherwise
 func (n *Node) HasNoChildren() bool {
-	return (n.Left.IsEmpty() && n.Right.IsEmpty())
+	return n.Left.IsEmpty() && n.Right.IsEmpty()
 }
 
 // Insert adds a node into a binary tree
@@ -97,7 +97,7 @@ func (n *Node) HasPathSum(sum int) bool {
 		return sum == 0
 	}
 	subSum := sum - n.Data
-	return (n.Left.HasPathSum(subSum) || n.Right.HasPathSum(subSum))
+	return n.Left.HasPathSum(subSum) || n.Right.HasPathSum(subSum)
 }
 
 // PrintPaths prints all the root-to-leaf paths of a given binary tree,
@@ -131,4 +131,44 @@ func f(slc []int, n *Node) {
 	}
 	f(slc, n.Left)
 	f(slc, n.Right)
+}
+
+// Mirror returns a mirror image of the given tree
+// with the children of every node swapped left-to-right
+func (n *Node) Mirror() *Node {
+	if n.IsEmpty() {
+		return nil
+	}
+	newTree := NewNode(n.Data)
+	newTree.Left = n.Left.Mirror()
+	newTree.Right = n.Right.Mirror()
+
+	newTree.Left, newTree.Right = newTree.Right, newTree.Left
+	return newTree
+}
+
+// Double adds a clone of each node as its left child in each subtree
+func (n *Node) Double() {
+	if n.IsEmpty() {
+		return
+	}
+	nClone := NewNode(n.Data)
+	n.Left.Double()
+	n.Right.Double()
+	nClone.Left, n.Left = n.Left, nClone
+}
+
+// SameTree compares the current tree to the given tree. Returns true if both
+// are similar in structure and members, false otherwise
+func (n *Node) SameTree(otherTree *Node) bool {
+	if n.IsEmpty() && otherTree.IsEmpty() {
+		return true
+	}
+	if n.IsEmpty() || otherTree.IsEmpty() {
+		return false
+	}
+	if n.Data == otherTree.Data {
+		return n.Left.SameTree(otherTree.Left) && n.Right.SameTree(otherTree.Right)
+	}
+	return false
 }
